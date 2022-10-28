@@ -35,7 +35,7 @@ namespace Company.Function
             // return new OkObjectResult(apiResponse);
 
             var query = table.CreateQuery<TableData>();
-            query.TakeCount = 100;
+            query.TakeCount = 5;
 
             
             // Här höll vi på ocj dribblade med Ienumerable vs tolist. antar att inparametern i metoden var Ienumerable å inte CludTable då
