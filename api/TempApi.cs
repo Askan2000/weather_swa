@@ -17,7 +17,7 @@ namespace Company.Function
         [FunctionName("TempApi")]
         public static async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, 
-            [Table("Temperatures", "1", Connection = "AzureWebJobsStorage")] CloudTable table,
+            [Table("Temperatures", "1", Connection = "TemperaturesDatabaseConnection")] CloudTable table,
             ILogger log)
         {
             //Detta ska ligga som ett Attribute unde http.. i metoden ovan. Ändra namn på tabellen weatherData och connectionen
