@@ -16,7 +16,8 @@ namespace Company.Function
     {
         [FunctionName("TempApi")]
         public static async Task<IActionResult> Run(
-            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req, 
+            [Table("Temperatures", "1", Connection = "AzureWebJobsStorage")] CloudTable table,
             ILogger log)
         {
             //Detta ska ligga som ett Attribute unde http.. i metoden ovan. Ändra namn på tabellen weatherData och connectionen
@@ -27,32 +28,32 @@ namespace Company.Function
             
             log.LogInformation("C# HTTP trigger function processed a request.");
 
-            var apiResponse = new ApiResponse(
-                    11.2,
-                    14.0
-                );
+            // var apiResponse = new ApiResponse(
+            //         11.2,
+            //         14.0
+            //     );
             
-            return new OkObjectResult(apiResponse);
+            // return new OkObjectResult(apiResponse);
 
-            // var query = table.CreateQuery<TableData>();
-            // query.TakeCount = 5;
+            var query = table.CreateQuery<TableData>();
+            query.TakeCount = 5;
 
             
             // // Här höll vi på ocj dribblade med Ienumerable vs tolist. antar att inparametern i metoden var Ienumerable å inte CludTable då
 
-            // var result = (await table.ExecuteQuerySegmentedAsync(query,null)).ToList();
+            var result = (await table.ExecuteQuerySegmentedAsync(query,null)).ToList();
 
-            // if(result.Any())
-            // {
-            //     var apiResponse = new ApiResponse(
-            //         result.First().Temperature,
-            //         result.Average(temp => temp.Temperature)
-            //     );
+            if(result.Any())
+            {
+                var apiResponse = new ApiResponse(
+                    result.First().Temperature,
+                    result.Average(temp => temp.Temperature)
+                );
 
-            //     return new OkObjectResult(apiResponse);
-            // }
+                return new OkObjectResult(apiResponse);
+            }
 
-            // return new OkResult();
+            return new OkResult();
         }
     }
     public record ApiResponse(double CurrentTemperature, double AverageTemperature);
