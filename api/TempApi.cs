@@ -42,12 +42,14 @@ namespace Company.Function
             // // Här höll vi på ocj dribblade med Ienumerable vs tolist. antar att inparametern i metoden var Ienumerable å inte CludTable då
 
             var result = (await table.ExecuteQuerySegmentedAsync(query,null)).ToList();
+            
+
 
             if(result.Any())
             {
                 var apiResponse = new ApiResponse(
-                    result.First().Temperature,
-                    result.Average(temp => temp.Temperature)
+                    result.First().WeightedTemperature,
+                    result.Average(temp => temp.WeightedTemperature)
                 );
 
                 return new OkObjectResult(apiResponse);
@@ -60,6 +62,6 @@ namespace Company.Function
 
     public class TableData : TableEntity
     {
-        public double Temperature { get; set; }
+        public double WeightedTemperature { get; set; }
     }
 }
