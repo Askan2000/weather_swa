@@ -27,6 +27,7 @@ function App() {
 
   return <>
       <div>
+        hej 
         {data}
       </div>
     </>
