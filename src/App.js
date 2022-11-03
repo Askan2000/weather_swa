@@ -30,8 +30,8 @@ function App() {
             
             let data = await JSON.parse(message)
 
-            setCurrentTemp(data.averageTemperature.toFixed(1))
-            setAverageTemp(data.currentTemperature.toFixed(1))
+            setCurrentTemp(data.currentTemperature.toFixed(1))
+            setAverageTemp(data.AverageTemperature.toFixed(1))
 
         })();
 
