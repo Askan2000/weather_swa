@@ -1,12 +1,9 @@
-using System;
-using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using Microsoft.Azure.Cosmos.Table;
 using System.Linq;
 
@@ -20,30 +17,10 @@ namespace Company.Function
             [Table("Temperatures", "1", Connection = "TemperaturesDatabaseConnection")] CloudTable table,
             ILogger log)
         {
-            //Detta ska ligga som ett Attribute unde http.. i metoden ovan. Ändra namn på tabellen weatherData och connectionen
-            //connection ska också in i local settings
-
-            //[Table("Temperatures", "1", Connection = "TemperaturesDatabaseConnection")] CloudTable table,
-            
-            
-            log.LogInformation("C# HTTP trigger function processed a request.");
-
-            // var apiResponse = new ApiResponse(
-            //         11.2,
-            //         14.0
-            //     );
-            
-            // return new OkObjectResult(apiResponse);
-
             var query = table.CreateQuery<TableData>();
             query.TakeCount = 5;
 
-            
-            // // Här höll vi på ocj dribblade med Ienumerable vs tolist. antar att inparametern i metoden var Ienumerable å inte CludTable då
-
             var result = (await table.ExecuteQuerySegmentedAsync(query,null)).ToList();
-            
-
 
             if(result.Any())
             {
