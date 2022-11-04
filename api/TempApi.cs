@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Azure.Cosmos.Table;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace Company.Function
 {
@@ -18,15 +19,27 @@ namespace Company.Function
             ILogger log)
         {
             var query = table.CreateQuery<TableData>();
-            query.TakeCount = 5;
+            query.TakeCount = 100;
 
             var result = (await table.ExecuteQuerySegmentedAsync(query,null)).ToList();
 
+            int index = 0;
+
+            List<double> fetchedTemperatures = new List<double>();
+
             if(result.Any())
             {
+                foreach(var item in result)
+                {
+                    fetchedTemperatures.Add(item.WeightedTemperature);
+                    index++;
+                    if(index == 100)
+                        break;  
+                }
+
                 var apiResponse = new ApiResponse(
                     result.First().WeightedTemperature,
-                    result.Average(temp => temp.WeightedTemperature)
+                    fetchedTemperatures.Average()
                 );
 
                 return new OkObjectResult(apiResponse);

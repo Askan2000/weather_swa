@@ -60,7 +60,7 @@ function App() {
                 <div class="flex-grow-1" >
                     <div> 
                         <h6 class="flex-grow-1"> 
-                            Medelvärde dom 5 senaste mätningarna: {averageTemp}°C
+                            Medelvärde dom 100 senaste mätningarna: {averageTemp}°C
                         </h6>
                     </div>
                 </div>
